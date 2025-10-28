@@ -2,6 +2,7 @@
 
 
 #include "Lock.h"
+#include "Particles/ParticleSystemComponent.h"
 
 // Sets default values
 ALock::ALock()
@@ -16,6 +17,11 @@ ALock::ALock()
 	
 	KeyItemMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Key Item Mesh"));
 	KeyItemMesh->SetupAttachment(RootComp); // this creates an attachment to the parent. In this case RootComp
+
+	FlameEffect = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Flame Effect"));
+	FlameEffect->SetupAttachment(KeyItemMesh); // Attach to the mesh (e.g., on top of the candle)
+	FlameEffect->SetAutoActivate(false);       // Don’t play automatically
+
 	
 	Tags.Add("Lock");
 }
@@ -40,6 +46,18 @@ void ALock::SetIsKeyInLock(bool NewIsKeyInLock)
 	IsKeyInLock = NewIsKeyInLock;
 	TriggerComp->Trigger(NewIsKeyInLock);
 	KeyItemMesh->SetVisibility(NewIsKeyInLock);
+
+	if (NewIsKeyInLock)
+	{
+		FlameEffect->SetVisibility(true);
+		FlameEffect->Activate(true);
+	}
+	else
+	{
+		FlameEffect->Deactivate();
+		FlameEffect->SetVisibility(false);
+		
+	}
 }
 
 bool ALock::GetIsKeyInLock()

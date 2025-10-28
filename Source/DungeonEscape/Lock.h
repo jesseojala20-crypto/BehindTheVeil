@@ -42,4 +42,7 @@ public:
 private:
 	   UPROPERTY(VisibleAnywhere)
 	   bool IsKeyInLock = false;
+
+	   UPROPERTY(VisibleAnywhere)
+	   UParticleSystemComponent* FlameEffect;
 };
